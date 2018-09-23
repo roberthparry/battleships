@@ -18,5 +18,10 @@ namespace BattleShipsService
         /// The type of the ship.
         /// </summary>
         public ShipType Type => ShipType.Destroyer;
+
+        /// <summary>
+        /// The number of hits the ship has taken
+        /// </summary>
+        public short Hits { get; set; }
     }
 }

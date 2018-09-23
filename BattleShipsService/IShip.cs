@@ -1,7 +1,8 @@
 ﻿using System;
 
 namespace BattleShipsService {
-    public interface IShip {
+    public interface IShip
+    {
         /// <summary>
         /// The number of squares the ship occupies.
         /// </summary>
@@ -11,13 +12,16 @@ namespace BattleShipsService {
         /// <summary>
         /// The name of the type of ship.
         /// </summary>
-        /// <value></value>
         String Name { get; }
         
         /// <summary>
         /// The type of the ship.
         /// </summary>
-        /// <value></value>
         ShipType Type { get; }
+
+        /// <summary>
+        /// Number of hits taken.
+        /// </summary>
+        Int16 Hits { get; set; }
     }
 }

@@ -19,5 +19,9 @@ namespace BattleShipsService
         /// </summary>
         public ShipType Type => ShipType.BattleShip;
 
+        /// <summary>
+        /// The number of hits the ship has taken
+        /// </summary>
+        public short Hits { get; set; }
     }
 }

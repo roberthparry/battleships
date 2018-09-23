@@ -7,7 +7,9 @@ namespace BattleShipsConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var board = new Gameboard();
+            board.Setup();
+            board.Print();
         }
     }
 }
