@@ -1,6 +1,6 @@
 namespace BattleShipsService
 {
-    public enum BattleShipType
+    public enum ShipType
     {
         BattleShip = 0,
         Destroyer = 1,
