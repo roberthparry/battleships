@@ -26,20 +26,8 @@ namespace BattleShipsService
         private void PlaceBattleShip()
         {
             IShip battleShip = new BattleShip();
-            Direction direction = Randomizer.Orientation;
-            Int32 position1 = Randomizer.Position(battleShip.Length);
-            Int32 position2 = Randomizer.Position(1);
 
-            if (direction == Direction.Down)
-            {
-                for (Int32 i = 0; i < battleShip.Length; i++)
-                    _cellGrid[position1 + i, position2].Ship = battleShip;
-            }
-            else
-            {
-                for (Int32 i = 0; i < battleShip.Length; i++)
-                    _cellGrid[position2, position1 + i].Ship = battleShip;
-            }
+            PlaceShip(battleShip);
         }
 
         private void PlaceDestroyers()
@@ -50,7 +38,60 @@ namespace BattleShipsService
 
         private void PlaceDestroyer()
         {
-            //throw new NotImplementedException();
+            IShip destroyer = new Destroyer();
+
+            PlaceShip(destroyer);
+        }
+
+        private void PlaceShip(IShip ship)
+        {
+            Direction direction;
+            Int32 position1;
+            Int32 position2;
+
+            do {
+                direction = Randomizer.Orientation;
+                position1 = Randomizer.Position(ship.Length);
+                position2 = Randomizer.Position(1);
+            } while (!CanPlaceShip(ship, position1, position2, direction));
+
+            DoPlaceShip(ship, position1, position2, direction);
+        }
+
+        private void DoPlaceShip(IShip ship, Int32 position1, Int32 position2, Direction direction)
+        {
+            if (direction == Direction.Down)
+            {
+                for (Int32 i = 0; i < ship.Length; i++)
+                    _cellGrid[position1 + i, position2].Ship = ship;
+            }
+            else
+            {
+                for (Int32 i = 0; i < ship.Length; i++)
+                    _cellGrid[position2, position1 + i].Ship = ship;
+            }
+        }
+
+        private Boolean CanPlaceShip(IShip ship, Int32 position1, Int32 position2, Direction direction)
+        {
+            if (direction == Direction.Down)
+            {
+                for (Int32 i = 0; i < ship.Length; i++)
+                {
+                    if (_cellGrid[position1 + i, position2].Ship != null)
+                        return false;
+                }
+                    
+            }
+            else
+            {
+                for (Int32 i = 0; i < ship.Length; i++)
+                {
+                    if (_cellGrid[position2, position1 + i].Ship != null)
+                        return false;
+                }
+            }
+            return true;
         }
 
         public void Print()
@@ -69,7 +110,7 @@ namespace BattleShipsService
                 Console.Write($"║ {row+1} ║");
             else
                 Console.Write($"║  {row+1} ║");
-                
+
             for (Int16 column = 0; column < GridSize; column++)
             {
                 Console.Write(" ");
