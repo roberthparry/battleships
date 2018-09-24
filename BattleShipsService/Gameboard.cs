@@ -7,16 +7,16 @@ namespace BattleShipsService
     {
         public const Int16 GridSize = 10;
 
-        private Cell[,] _shipGrid = null;
+        private Cell[,] _cellGrid = null;
 
         public void Setup()
         {
-            _shipGrid = new Cell[GridSize, GridSize];
+            _cellGrid = new Cell[GridSize, GridSize];
             for (Int32 row = 0; row < GridSize; row++)
             {
                 for (Int32 column = 0; column < GridSize; column++)
                 {
-                    _shipGrid[row, column] = new Cell { Ship = null, Status = CellStatus.Unshelled };
+                    _cellGrid[row, column] = new Cell { Ship = null, Status = CellStatus.Unshelled };
                 }
             }
             PlaceBattleShip();
@@ -33,12 +33,12 @@ namespace BattleShipsService
             if (direction == Direction.Down)
             {
                 for (Int32 i = 0; i < battleShip.Length; i++)
-                    _shipGrid[position1 + i, position2].Ship = battleShip;
+                    _cellGrid[position1 + i, position2].Ship = battleShip;
             }
             else
             {
                 for (Int32 i = 0; i < battleShip.Length; i++)
-                    _shipGrid[position2, position1 + i].Ship = battleShip;
+                    _cellGrid[position2, position1 + i].Ship = battleShip;
             }
         }
 
@@ -55,30 +55,38 @@ namespace BattleShipsService
 
         public void Print()
         {
-            Console.WriteLine("     ╔═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╗");
-            Console.WriteLine("     ║ A │ B │ C │ D │ E │ F │ G │ H │ I │ J ║");
-            Console.WriteLine("╔════╬═══╪═══╪═══╪═══╪═══╪═══╪═══╪═══╪═══╪═══╣");
-            Console.WriteLine("║  1 ║");
-            Console.WriteLine("╟────╫");
-            Console.WriteLine("║  2 ║");
-            Console.WriteLine("╟────╫");
-            Console.WriteLine("║  3 ║");
-            Console.WriteLine("╟────╫");
-            Console.WriteLine("║  4 ║");
-            Console.WriteLine("╟────╫");
-            Console.WriteLine("║  5 ║");
-            Console.WriteLine("╟────╫");
-            Console.WriteLine("║  6 ║");
-            Console.WriteLine("╟────╫");
-            Console.WriteLine("║  7 ║");
-            Console.WriteLine("╟────╫");
-            Console.WriteLine("║  8 ║");
-            Console.WriteLine("╟────╫");
-            Console.WriteLine("║  9 ║");
-            Console.WriteLine("╟────╫");
-            Console.WriteLine("║ 10 ║");
-            Console.WriteLine("╚════╩═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╝");
+            Console.Write("     ╔═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╗\n");
+            Console.Write("     ║ A │ B │ C │ D │ E │ F │ G │ H │ I │ J ║\n");
+            Console.Write("╔════╬═══╪═══╪═══╪═══╪═══╪═══╪═══╪═══╪═══╪═══╣\n");
+
+            for (Int16 row = 0; row < GridSize; row++)
+                PrintRow(row);
         }
-        
+
+        private void PrintRow(Int16 row)
+        {
+            if (row == GridSize-1)
+                Console.Write($"║ {row+1} ║");
+            else
+                Console.Write($"║  {row+1} ║");
+                
+            for (Int16 column = 0; column < GridSize; column++)
+            {
+                Console.Write(" ");
+                Cell cell = _cellGrid[row, column];
+                if (cell.Ship != null)
+                    Console.Write($"{cell.Ship.Name[0]} ");
+                else
+                    Console.Write("  ");
+                if (column == GridSize-1)
+                    Console.WriteLine("║");
+                else
+                    Console.Write("│");
+            }
+            if (row == GridSize-1)
+                Console.Write("╚════╩═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╝\n");
+            else
+                Console.Write("╟────╫───┼───┼───┼───┼───┼───┼───┼───┼───┼───╢\n");
+        }
     }
 }
