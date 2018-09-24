@@ -8,7 +8,13 @@ namespace BattleShipsService
         public const Int16 GridSize = 10;
 
         private Cell[,] _cellGrid = null;
+        private IShip _destroyer1 = null;
+        private IShip _destroyer2 = null;
+        private IShip _battleShip = null;
 
+        /// <summary>
+        /// Create the 10x10 grid and place the ships on it.
+        /// </summary>
         public void Setup()
         {
             _cellGrid = new Cell[GridSize, GridSize];
@@ -19,28 +25,36 @@ namespace BattleShipsService
                     _cellGrid[row, column] = new Cell { Ship = null, Status = CellStatus.Unshelled };
                 }
             }
-            PlaceBattleShip();
-            PlaceDestroyers();
+            _battleShip = new BattleShip();
+            _destroyer1 = new Destroyer();
+            _destroyer2 = new Destroyer();
+
+            PlaceShip(_battleShip);
+            PlaceShip(_destroyer1);
+            PlaceShip(_destroyer2);
         }
 
-        private void PlaceBattleShip()
+        public Boolean TranslateCellReference(String cellReference, out Int16 row, out Int16 column)
         {
-            IShip battleShip = new BattleShip();
+            row = column = -1;
+            if (String.IsNullOrEmpty(cellReference))
+                return false;
 
-            PlaceShip(battleShip);
-        }
+            cellReference = cellReference.ToLower();
+            Int32 index = "abcdefghij".IndexOf(cellReference[0]);
+            if (index < 0)
+                return false;
 
-        private void PlaceDestroyers()
-        {
-            PlaceDestroyer();
-            PlaceDestroyer();
-        }
+            column = (Int16)index;
 
-        private void PlaceDestroyer()
-        {
-            IShip destroyer = new Destroyer();
+            if (!Int32.TryParse(cellReference.Substring(1), out Int32 number))
+                return false;
 
-            PlaceShip(destroyer);
+            if (number <= 0 || number > GridSize)
+                return false;
+
+            row = (Int16)(number-1);
+            return true;
         }
 
         private void PlaceShip(IShip ship)
@@ -94,6 +108,9 @@ namespace BattleShipsService
             return true;
         }
 
+        /// <summary>
+        /// Print the Gameboard grid.
+        /// </summary>
         public void Print()
         {
             Console.Write("     ╔═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╤═══╗\n");
@@ -128,6 +145,26 @@ namespace BattleShipsService
                 Console.Write("╚════╩═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╝\n");
             else
                 Console.Write("╟────╫───┼───┼───┼───┼───┼───┼───┼───┼───┼───╢\n");
+        }
+
+        public Boolean IsGameWon => _battleShip.Hits == _battleShip.Length &&
+                                    _destroyer1.Hits == _destroyer1.Length &&
+                                    _destroyer2.Hits == _destroyer2.Length;
+
+        public FiringResult FireMissile(Int16 row, Int16 column)
+        {
+            Cell cell = _cellGrid[row, column];
+            
+            if (cell.Status == CellStatus.Shelled)
+                return FiringResult.Repeat;
+
+            cell.Status = CellStatus.Shelled;
+
+            if (cell.Ship == null)
+                return FiringResult.Missed;
+
+            cell.Ship.Hits++;
+            return FiringResult.Hit;
         }
     }
 }
