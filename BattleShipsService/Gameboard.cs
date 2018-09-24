@@ -7,6 +7,8 @@ namespace BattleShipsService
     {
         public const Int16 GridSize = 10;
 
+        private const String ColumnHeaders = "abcdefghij";
+
         private Cell[,] _cellGrid = null;
         private IShip _destroyer1 = null;
         private IShip _destroyer2 = null;
@@ -34,14 +36,14 @@ namespace BattleShipsService
             PlaceShip(_destroyer2);
         }
 
-        public Boolean TranslateCellReference(String cellReference, out Int16 row, out Int16 column)
+        public static Boolean TranslateCellReference(String cellReference, out Int16 row, out Int16 column)
         {
             row = column = -1;
             if (String.IsNullOrEmpty(cellReference))
                 return false;
 
             cellReference = cellReference.ToLower();
-            Int32 index = "abcdefghij".IndexOf(cellReference[0]);
+            Int32 index = ColumnHeaders.IndexOf(cellReference[0]);
             if (index < 0)
                 return false;
 
@@ -131,11 +133,8 @@ namespace BattleShipsService
             for (Int16 column = 0; column < GridSize; column++)
             {
                 Console.Write(" ");
-                Cell cell = _cellGrid[row, column];
-                if (cell.Ship != null)
-                    Console.Write($"{cell.Ship.Name[0]} ");
-                else
-                    Console.Write("  ");
+                Char symbol = SymbolForCell(_cellGrid[row, column]);
+                Console.Write($"{symbol} ");
                 if (column == GridSize-1)
                     Console.WriteLine("║");
                 else
@@ -145,6 +144,14 @@ namespace BattleShipsService
                 Console.Write("╚════╩═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╝\n");
             else
                 Console.Write("╟────╫───┼───┼───┼───┼───┼───┼───┼───┼───┼───╢\n");
+        }
+
+        private static Char SymbolForCell(Cell cell)
+        {
+            if (cell.Status != CellStatus.Shelled)
+                return ' ';
+
+            return (cell.Ship == null) ? 'x' : '#';
         }
 
         public Boolean IsGameWon => _battleShip.Hits == _battleShip.Length &&

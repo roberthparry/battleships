@@ -18,7 +18,7 @@ namespace BattleShipsConsole
                     return;
                 }
 
-                if (!board.TranslateCellReference(cellReference, out Int16 row, out Int16 column))
+                if (!Gameboard.TranslateCellReference(cellReference, out Int16 row, out Int16 column))
                 {
                     Console.WriteLine($"'{cellReference}' is not a valid cell.");
                     continue;
