@@ -7,7 +7,7 @@ namespace BattleShipsService
     {
         public const Int16 GridSize = 10;
 
-        private const String ColumnHeaders = "abcdefghij";
+        private const String _columnHeaders = "abcdefghij";
 
         private Cell[,] _cellGrid = null;
         private IShip _destroyer1 = null;
@@ -43,7 +43,7 @@ namespace BattleShipsService
                 return false;
 
             cellReference = cellReference.ToLower();
-            Int32 index = ColumnHeaders.IndexOf(cellReference[0]);
+            Int32 index = _columnHeaders.IndexOf(cellReference[0]);
             if (index < 0)
                 return false;
 
