@@ -7,7 +7,7 @@ namespace BattleShipsService
     {
         public const Int16 GridSize = 10;
 
-        private const String ColumnHeaders = "abcdefghij";
+        private const String _columnHeaders = "abcdefghij";
 
         private Cell[,] _cellGrid = null;
         private IShip _destroyer1 = null;
@@ -43,7 +43,7 @@ namespace BattleShipsService
                 return false;
 
             cellReference = cellReference.ToLower();
-            Int32 index = ColumnHeaders.IndexOf(cellReference[0]);
+            Int32 index = _columnHeaders.IndexOf(cellReference[0]);
             if (index < 0)
                 return false;
 
@@ -125,25 +125,18 @@ namespace BattleShipsService
 
         private void PrintRow(Int16 row)
         {
-            if (row == GridSize-1)
-                Console.Write($"║ {row+1} ║");
-            else
-                Console.Write($"║  {row+1} ║");
+            String rowIndicator = (row == GridSize-1) ? $"║ {row+1} ║" : $"║  {row+1} ║";
+            Console.Write(rowIndicator);
 
             for (Int16 column = 0; column < GridSize; column++)
             {
-                Console.Write(" ");
                 Char symbol = SymbolForCell(_cellGrid[row, column]);
-                Console.Write($"{symbol} ");
-                if (column == GridSize-1)
-                    Console.WriteLine("║");
-                else
-                    Console.Write("│");
+                Console.Write($" {symbol} ");
+                String verticalGridLine = (column == GridSize-1) ? "║\n" : "│";
+                Console.Write(verticalGridLine);
             }
-            if (row == GridSize-1)
-                Console.Write("╚════╩═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╝\n");
-            else
-                Console.Write("╟────╫───┼───┼───┼───┼───┼───┼───┼───┼───┼───╢\n");
+            String rowDivider = (row == GridSize-1) ? "╚════╩═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╧═══╝" : "╟────╫───┼───┼───┼───┼───┼───┼───┼───┼───┼───╢";
+            Console.WriteLine(rowDivider);
         }
 
         private static Char SymbolForCell(Cell cell)
