@@ -2,26 +2,21 @@ using System;
 
 namespace BattleShipsService
 {
-    public class BattleShip : IShip
+    public class BattleShip : Ship
     {    
         /// <summary>
         /// The number of squares the ship occupies.
         /// </summary>
-        public Int16 Length => 5;
+        public override Int16 Length => 5;
 
         /// <summary>
         /// The name of the type of ship.
         /// </summary>
-        public String Name => $"{nameof(BattleShip)}";
+        public override String Name => $"{nameof(BattleShip)}";
 
         /// <summary>
         /// The type of the ship.
         /// </summary>
-        public ShipType Type => ShipType.BattleShip;
-
-        /// <summary>
-        /// The number of hits the ship has taken
-        /// </summary>
-        public short Hits { get; set; }
+        public override ShipType Type => ShipType.BattleShip;
     }
 }
