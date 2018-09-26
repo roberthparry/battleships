@@ -6,7 +6,7 @@ namespace BattleShipsService
         /// The ship at the target.
         /// </summary>
         /// <value></value>
-        public IShip Ship { get; set; }
+        public Ship Ship { get; set; }
 
         /// <summary>
         /// Status of ship at target (Intact, Damaged)

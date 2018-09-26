@@ -10,9 +10,9 @@ namespace BattleShipsService
         private const String _columnHeaders = "abcdefghij";
 
         private Cell[,] _cellGrid = null;
-        private IShip _destroyer1 = null;
-        private IShip _destroyer2 = null;
-        private IShip _battleShip = null;
+        private Ship _destroyer1 = null;
+        private Ship _destroyer2 = null;
+        private Ship _battleShip = null;
 
         /// <summary>
         /// Create the 10x10 grid and place the ships on it.
@@ -59,7 +59,7 @@ namespace BattleShipsService
             return true;
         }
 
-        private void PlaceShip(IShip ship)
+        private void PlaceShip(Ship ship)
         {
             Direction direction;
             Int32 position1;
@@ -74,7 +74,7 @@ namespace BattleShipsService
             DoPlaceShip(ship, position1, position2, direction);
         }
 
-        private void DoPlaceShip(IShip ship, Int32 position1, Int32 position2, Direction direction)
+        private void DoPlaceShip(Ship ship, Int32 position1, Int32 position2, Direction direction)
         {
             if (direction == Direction.Down)
             {
@@ -88,7 +88,7 @@ namespace BattleShipsService
             }
         }
 
-        private Boolean CanPlaceShip(IShip ship, Int32 position1, Int32 position2, Direction direction)
+        private Boolean CanPlaceShip(Ship ship, Int32 position1, Int32 position2, Direction direction)
         {
             if (direction == Direction.Down)
             {
@@ -130,8 +130,7 @@ namespace BattleShipsService
 
             for (Int16 column = 0; column < GridSize; column++)
             {
-                Char symbol = SymbolForCell(_cellGrid[row, column]);
-                Console.Write($" {symbol} ");
+                Console.Write($" {SymbolForCell(_cellGrid[row, column])} ");
                 String verticalGridLine = (column == GridSize-1) ? "║\n" : "│";
                 Console.Write(verticalGridLine);
             }
@@ -147,9 +146,7 @@ namespace BattleShipsService
             return (cell.Ship == null) ? 'x' : '#';
         }
 
-        public Boolean IsGameWon => _battleShip.Hits == _battleShip.Length &&
-                                    _destroyer1.Hits == _destroyer1.Length &&
-                                    _destroyer2.Hits == _destroyer2.Length;
+        public Boolean IsGameWon => _battleShip.IsDestroyed && _destroyer1.IsDestroyed && _destroyer2.IsDestroyed;
 
         public FiringResult FireMissile(Int16 row, Int16 column)
         {
