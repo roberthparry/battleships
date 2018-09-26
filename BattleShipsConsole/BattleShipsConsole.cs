@@ -40,6 +40,7 @@ namespace BattleShipsConsole
 
             } while(!board.IsGameWon);
 
+            board.Print();
             Console.WriteLine("Congratulations, you Won!");
         }
     }
