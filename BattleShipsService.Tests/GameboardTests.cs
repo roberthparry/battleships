@@ -17,8 +17,8 @@ namespace BattleShipsService.Tests
         public void TranslateCellReference_HandlesValidReferences(String cellReference, Int16 expectedRow, Int16 expectedColumn)
         {
             Assert.AreEqual(Gameboard.TranslateCellReference(cellReference, out Int16 row, out Int16 column), true);
-            Assert.AreEqual(expectedRow, row);
-            Assert.AreEqual(expectedColumn, column);
+            Assert.AreEqual(row, expectedRow);
+            Assert.AreEqual(column, expectedColumn);
         }
 
         [TestCase("")]
